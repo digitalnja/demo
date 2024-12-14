@@ -1,15 +1,34 @@
 package com.ivanlechtmec;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.InputStream;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InputFileReader {
-    Operation operation;
-    String fileName = "message.txt";
+    public static void main(String[] args) {
+        String inputFile = "message.txt";
+        List<Integer> ints = new ArrayList<>();
+        List<Float> floats = new ArrayList<>();
+        List<String> strings = new ArrayList<>();
 
 
-
-
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));) {
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                line.trim();
+                if (line.matches("-?\\d+")) {
+                    ints.add(Integer.parseInt(line));
+                } else if (line.matches("-?\\d+\\.\\d+")) {
+                    floats.add(Float.parseFloat(line));
+                } else {
+                    strings.add(line);
+                }
+            }
+        }catch (IOException e){
+            System.out.println(e.getMessage());
+        }
+        System.out.println(ints);
+        System.out.println(floats);
+        System.out.println(strings);
+    }
 }
