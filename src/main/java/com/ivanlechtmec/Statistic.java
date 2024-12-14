@@ -1,30 +1,34 @@
 package com.ivanlechtmec;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Statistic {
     public static void main(String[] args) {
-        try {
-            FileOutputStream outputStream = new FileOutputStream("output_message.txt");
-            FileInputStream inputStream = new FileInputStream("message.txt");
-            byte[] buffer = new byte[1024];
-            int byteRead;
+        String inputFile = "message.txt";
+        List<Integer> ints = new ArrayList<>();
+        List<Float> floats = new ArrayList<>();
+        List<String> strings = new ArrayList<>();
 
-            while ((byteRead = inputStream.read(buffer)) != -1){
-                outputStream.write(buffer, 0, byteRead);
+
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));) {
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                line.trim();
+                if (line.matches("-?\\d+")) {
+                    ints.add(Integer.parseInt(line));
+                } else if (line.matches("-?\\d+\\.\\d+")) {
+                    floats.add(Float.parseFloat(line));
+                } else {
+                    strings.add(line);
+                }
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-
+        }catch (IOException e){
+            System.out.println(e.getMessage());
         }
-
-
-
-
+        System.out.println(ints);
+        System.out.println(floats);
+        System.out.println(strings);
     }
-
 }
