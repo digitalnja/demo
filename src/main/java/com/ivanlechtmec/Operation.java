@@ -1,5 +1,5 @@
 package com.ivanlechtmec;
 
-public interface Operation {
+interface Operation {
     void doOperation();
 }

@@ -1,34 +1,33 @@
 package com.ivanlechtmec;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-
-public class InputFileReader {
-    public static void main(String[] args) {
-        String inputFile = "message.txt";
-        List<Integer> ints = new ArrayList<>();
-        List<Float> floats = new ArrayList<>();
-        List<String> strings = new ArrayList<>();
 
 
-        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)));) {
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                line.trim();
-                if (line.matches("-?\\d+")) {
-                    ints.add(Integer.parseInt(line));
-                } else if (line.matches("-?\\d+\\.\\d+")) {
-                    floats.add(Float.parseFloat(line));
+public class InputFileReader implements Operation {
+    private final String inputFile;
+    private final ContainerOfList container;
+
+    public InputFileReader(String inputFile, ContainerOfList container) {
+        this.inputFile = inputFile;
+        this.container = container;
+    }
+
+    @Override
+    public void doOperation() {
+        try(BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile)))){
+            String str;
+            while ((str = bufferedReader.readLine()) != null){
+                str.trim();
+                if(str.matches("-?\\d+")){
+                    container.ints.add(Integer.parseInt(str));
+                } else if (str.matches("-?\\d+(\\.\\d+)?([eE][+-]?\\d+)?")) {
+                    container.floats.add(Float.parseFloat(str));
                 } else {
-                    strings.add(line);
+                    container.strings.add(str);
                 }
             }
-        }catch (IOException e){
-            System.out.println(e.getMessage());
+        } catch (IOException e){
+            System.out.println("Проблема с чтением файла" + e.getMessage());
         }
-        System.out.println(ints);
-        System.out.println(floats);
-        System.out.println(strings);
     }
 }
